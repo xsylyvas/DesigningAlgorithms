@@ -164,17 +164,43 @@ void mergingFile(string fileNameA, string fileNameB, string fileNameC, int lengt
 	finC.close();
 	foutA.close();
 }
-void sort(string fileNameA, string fileNameB, string fileNameC)
+void sort(string fileNameA, string fileNameB, string fileNameC,int length)
 {
-	int length = 1;
 	while (1)
 	{
 		splitIntoFiles(fileNameA, fileNameB, fileNameC, length);
-		//ifstream fileC(fileNameC);
-		//if (fileC.peek() == std::ifstream::traits_type::eof())break;
+		ifstream fileC(fileNameC);
+		if (fileC.peek() == std::ifstream::traits_type::eof())break;
 		mergingFile(fileNameA, fileNameB, fileNameC, length);
-		if (length == 1)break;
+		
 		length *= 2;
+		cout << length << endl;
 	}
 
+}
+void preliminarySorting(string fileNameA, string fileNameB,int size)
+{
+	int* arrayT = new int[size];
+	ifstream finA(fileNameA);
+	ofstream foutB(fileNameB);
+
+	int temp,iter=0;
+	while (!finA.eof())
+	{
+		finA >> arrayT[iter];
+		iter++;
+		if (iter == size)
+		{
+			sort(arrayT, arrayT + size);
+			for (int i = 0; i < size; i++)foutB << " " << arrayT[i];
+			iter = 0;
+		}
+	}
+	if (iter != 0)
+	{
+		sort(arrayT, arrayT + iter);
+		for (int i = 0; i < iter; i++)foutB << " " << arrayT[i];
+	}
+	finA.close();
+	foutB.close();
 }
