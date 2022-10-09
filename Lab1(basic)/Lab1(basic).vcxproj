@@ -141,9 +141,11 @@
   <ItemGroup>
     <ClCompile Include="auxiliary.cpp" />
     <ClCompile Include="Lab1(basic).cpp" />
+    <ClCompile Include="sort.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="auxiliary.h" />
+    <ClInclude Include="sort.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
