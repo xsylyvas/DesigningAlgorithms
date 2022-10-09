@@ -5,19 +5,19 @@ void splitIntoFiles(string fileNameA, string fileNameB, string fileNameC, int le
 	ofstream foutB(fileNameB);
 	ofstream foutC(fileNameC);
 
-	int temp,count = 1;
+	int temp, count = 1;
 	bool writeToB = true;
 	while (!finA.eof())
 	{
 		finA >> temp;
-		if (writeToB)foutB << " "<< temp ;
-		else foutC << " "<< temp ;
+		if (writeToB)foutB << " " << temp;
+		else foutC << " " << temp;
 		count++;
 		if (count > length)
 		{
 			count = 1;
 			writeToB = !writeToB;
-			
+
 		}
 	}
 	foutB << "";
@@ -32,7 +32,7 @@ void mergingFile(string fileNameA, string fileNameB, string fileNameC, int lengt
 	ifstream finC(fileNameC);
 	ofstream foutA(fileNameA);
 
-	int pointerB=0, pointerC=0;
+	int pointerB = 0, pointerC = 0;
 
 	int tempB, tempC;
 
@@ -41,7 +41,7 @@ void mergingFile(string fileNameA, string fileNameB, string fileNameC, int lengt
 	bool endC = false;
 	while (!finB.eof())
 	{
-		
+
 		finB >> tempB;
 		if (finC.eof())// досягнутий кінець файлу C, але не відомо, чи записався останній елемент
 		{
@@ -68,7 +68,7 @@ void mergingFile(string fileNameA, string fileNameB, string fileNameC, int lengt
 		}
 		if (isstartSegment && !finC.eof())//об'єднання нових нової пари сегментів
 		{
-			
+
 			while (!finC.eof() && pointerC < length)
 			{
 				finC >> tempC;
@@ -85,48 +85,48 @@ void mergingFile(string fileNameA, string fileNameB, string fileNameC, int lengt
 					if (finC.eof())endC = true;
 				}
 			}
-			if ( tempC <= tempB)
+			if (tempC <= tempB)
 			{
 				foutA << " " << tempB;
 				pointerB++;
 			}
-			
+
 		}
 		else
-		if(!isstartSegment && !finC.eof())//об'єднання пари сегментів, що вже опрацбовувались на попередніх ітераціях
-		{
-			if (pointerC == length  || tempB < tempC)
+			if (!isstartSegment && !finC.eof())//об'єднання пари сегментів, що вже опрацбовувались на попередніх ітераціях
 			{
-				foutA << " " << tempB ;
-				pointerB++;
-			}
-			else
-			{
-				foutA << " " << tempC ;
-				pointerC++;
-				while (!finC.eof() && pointerC < length)
-				{
-					finC >> tempC;
-					if (tempB < tempC)
-					{
-						foutA << " " << tempB;
-						pointerB++;
-						break;
-					}
-					else
-					{
-						foutA << " " << tempC;
-						pointerC++;
-						if (finC.eof())endC = true;
-					}
-				}
-				if (tempC <= tempB)
+				if (pointerC == length || tempB < tempC)
 				{
 					foutA << " " << tempB;
 					pointerB++;
 				}
+				else
+				{
+					foutA << " " << tempC;
+					pointerC++;
+					while (!finC.eof() && pointerC < length)
+					{
+						finC >> tempC;
+						if (tempB < tempC)
+						{
+							foutA << " " << tempB;
+							pointerB++;
+							break;
+						}
+						else
+						{
+							foutA << " " << tempC;
+							pointerC++;
+							if (finC.eof())endC = true;
+						}
+					}
+					if (tempC <= tempB)
+					{
+						foutA << " " << tempB;
+						pointerB++;
+					}
+				}
 			}
-		}
 		
 		if (pointerB == length && pointerC != length)//досягнутий кінець файлу B, при цьому останній елемент файлу успішно записаний
 		{
@@ -166,14 +166,15 @@ void mergingFile(string fileNameA, string fileNameB, string fileNameC, int lengt
 }
 void sort(string fileNameA, string fileNameB, string fileNameC)
 {
-	int length =1;
+	int length = 1;
 	while (1)
 	{
 		splitIntoFiles(fileNameA, fileNameB, fileNameC, length);
-		ifstream fileC(fileNameC);
-		if (fileC.peek() == std::ifstream::traits_type::eof())break;
+		//ifstream fileC(fileNameC);
+		//if (fileC.peek() == std::ifstream::traits_type::eof())break;
 		mergingFile(fileNameA, fileNameB, fileNameC, length);
+		if (length == 1)break;
 		length *= 2;
 	}
-	
+
 }
